@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="mobile-web-app-capable" content="yes">	
+    <title>Stackoverflow test</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+	<div id="app">
+		<div id="search-layer">
+			<label>Search: </label>
+			<input type="text" v-model="search" @change="updateList" lazy placeholder="Tag"/>
+		</div>
+
+		<div id="trends-layer">
+			<template v-for="(item, index) in items" >
+				<button type="button" class="trend-btn" 
+						v-on:click="updateQuestionList(item)"
+						v-bind:class="{ 'active': trend == item.name}" 
+						>{{ item.name }}</button>
+			</template>
+		</div>
+		
+		<div id="question-list-layer">
+			<div>
+				<template v-for="item in items" >
+					<div class="list-item">
+		  				<div class="content-layer">
+		  					<a v-bind:href='item.link' target="_blank" class="title">
+			  					{{ item.title }}
+			  				</a>
+		  					<div class="info-layer">
+		  						<div class="info" :class="{ 'red': item.score < 0 }">
+		  							<h3>Score</h3>
+		  							<p>{{ item.score }}</p>
+		  						</div>
+		  						<div class="info" :class="{ 'green': item.answer_count === 1, 'greenBg': item.answer_count > 1 }">
+		  							<h3>Answer</h3>
+		  							<p>{{ item.answer_count }}</p>
+		  						</div>
+		  						<div class="info">
+		  							<h3>View</h3>
+		  							<p>{{ item.view_count }}</p>
+		  						</div>
+		  					</div>
+		  				</div>
+		  				<div class="user-layer">
+	  						<img v-bind:src='item.owner.profile_image' />
+	  						<p>{{ item.owner.display_name }}</p>
+	  					</div>
+		  			</div>
+				</template>
+			</div>
+			<transition name="fade">
+				<div class="loading" v-show="loading">
+					<div class="loading-flex">
+						<div class="loader"></div> 
+						<p>Loading</p>
+					</div>
+				</div>
+			</transition>
+		</div>
+	</div>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.27.2/axios.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.11/vue.js"></script>
+<script src="app.js"></script>
+</html>
